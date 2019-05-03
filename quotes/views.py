@@ -2,10 +2,25 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 
 from .models import Quote
 from .forms import QuoteForm
 from pages.models import Page
+
+#class for user registration
+
+class Register(CreateView):
+    template_name = 'registration/register.html'
+    form_class = UserCreationForm
+    success_url = reverse_lazy('register-success')  #url to be redirected once form is successfully processed
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(self.success_url)
+
 
 #class for showing detail view of one quote
 class QuoteView(DetailView):
